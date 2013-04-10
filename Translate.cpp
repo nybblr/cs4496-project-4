@@ -39,6 +39,10 @@ Translate::Translate( istream& in, DofList* dofs )
     }
 }
 
+Mat4d Translate::GetDeriv(int dof)
+{
+  Mat4d m=vl_zero; return m;
+}
 
 void Translate::MakeDofs( char* name, DofList& dofs, Vec3d range)
 {
@@ -67,16 +71,16 @@ void Translate::MakeDofs( char* name, DofList& dofs, Vec3d range)
 void Translate::Apply()
 {
   glTranslated( mOffset[0], mOffset[1], mOffset[2] );
-  
+
 }
 
 Mat4d Translate::GetTransform()
-{	
+{
   Mat4d m = vl_I;
   m[0][3] = mOffset[0];
   m[1][3] = mOffset[1];
   m[2][3] = mOffset[2];
   m[3][3] = 1;
-  
+
   return m;
 }

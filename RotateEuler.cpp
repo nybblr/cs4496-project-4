@@ -138,3 +138,7 @@ Mat4d RotateEuler::GetTransform()
   return m;
 }
 
+Mat4d RotateEuler::GetDeriv(int dof)
+{
+  Mat4d m=vl_zero; return m;
+}
