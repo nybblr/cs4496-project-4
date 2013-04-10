@@ -68,7 +68,7 @@ void Solution(void *v)
 {
     cout << "TODO: Solve inverse kinematics problem" << endl;
     for (int i = 0; i < UI->mData->mSelectedModel->GetDofCount(); i++) {
-      cout << UI->mData->mSelectedModel->mDofList.mDofs[i] << endl;
+      cout << UI->mData->mSelectedModel->mDofList.mDofs[i]->GetName() << endl;
     }
     bool test = UI->mData->mSelectedModel->mLimbs[0]->mTransforms[0]->IsDof();
 }
