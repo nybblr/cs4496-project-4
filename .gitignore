@@ -11,3 +11,12 @@
 *.lai
 *.la
 *.a
+
+# Dependencies
+/vl-1.3.2
+/fltk-1.3.0
+
+# Builds
+/debug
+/release
+/rtik
