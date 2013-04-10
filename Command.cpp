@@ -67,6 +67,15 @@ void LoadModel(void *v)
 void Solution(void *v)
 {
     cout << "TODO: Solve inverse kinematics problem" << endl;
+
+    int numDofs = UI->mData->mSelectedModel->GetDofCount();
+    int numCons = UI->mData->mSelectedModel->GetHandleCount() * 3;
+
+    Matd J;
+    J.SetSize(numCons, UI->mData->mSelectedModel->GetDofCount());
+
+    cout << "The Jacobian will be " << numCons << " by " << numDofs << endl;
+
     for (int i = 0; i < UI->mData->mSelectedModel->GetDofCount(); i++) {
       cout << UI->mData->mSelectedModel->mDofList.mDofs[i]->GetName() << endl;
     }
