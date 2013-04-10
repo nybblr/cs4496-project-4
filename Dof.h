@@ -22,17 +22,17 @@ class Dof
   }
 
   char* GetName() { return mName; }
-        
+
 
   virtual double GetTransformValue(){
     return 0.0;
   }
   virtual void SetTransformValue(double value){};
-  
+
   virtual int ReturnType(){
     return -1;
   }
-  		
+
   int mId;  // the order of this dof in mSelectedModel->mDofList.mDofs
   double mVal; // current value of this dof
   double mUpperBound;
@@ -58,7 +58,7 @@ class DofList
   void GetDofs( Vecd *data );
   double GetDof(int index);
   void UpdateDofs();
-     
+
   std::vector<Dof*> mDofs;
 };
 

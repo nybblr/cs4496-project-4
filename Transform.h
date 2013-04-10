@@ -16,7 +16,17 @@ class Transform
   virtual int GetIndex() { return mIndex; } // retursn the type of this transformation (i.e, scale, rotateEuler, or translate)
   virtual Dof* GetDof( int dof ) { return 0; } // returns a pointer to the specified dof
   int mIndex;
+  // virtual bool ContainsDof( Dof* dof ) { return false; }
   virtual Mat4d GetDeriv(int dof){ Mat4d m=vl_zero; return m;} // TODO: implement this function for each subclass
+  virtual Mat4d GetTransformOrDeriv(Dof* dof)
+  {
+    if (IsDof()) {
+      int index = 0;
+      return GetDeriv(index);
+    } else {
+      return GetTransform();
+    }
+  }
 };
 
 #endif

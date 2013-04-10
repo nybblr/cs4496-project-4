@@ -13,7 +13,7 @@ void DofList::UpdateDofs()
 }
 
 void DofList::SetDofs(Vecd &data)
-{	
+{
   for( int i = 0; i < mDofs.size(); i++ ){
     mDofs[i]->mVal = data[i];
     mDofs[i]->SetTransformValue(data[i]);
@@ -21,7 +21,7 @@ void DofList::SetDofs(Vecd &data)
 }
 
 void DofList::SetDof(int index, double value)
-{	
+{
   mDofs[index]->mVal = value;
   mDofs[index]->SetTransformValue(value);
 }
