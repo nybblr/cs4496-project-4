@@ -43,7 +43,7 @@ void LoadModel(void *v)
     return;
 
   FILE *file = fopen(params, "r");
-    
+
   if(file == NULL){
     cout << "Skel file does not exist" << endl;
     return;
@@ -60,13 +60,14 @@ void LoadModel(void *v)
   UI->mGLWindow->mShowModel = true;
   UI->mShowModel_but->value(1);
   UI->mGLWindow->refresh();
-  
+
   cout << "number of dofs in model: " << UI->mData->mModels[0]->GetDofCount() << endl;
 }
 
 void Solution(void *v)
 {
     cout << "TODO: Solve inverse kinematics problem" << endl;
+    cout << UI->mData->mSelectedModel->mDofList.mDofs[0] << endl;
     bool test = UI->mData->mSelectedModel->mLimbs[0]->mTransforms[0]->IsDof();
 }
 
@@ -88,11 +89,11 @@ void LoadC3d(void *v)
 
   if(!params)
     return;
-  
+
   char *c3dFilename = new char[80];
-  
+
   // load single c3d file
- 
+
   C3dFileInfo *openFile = new C3dFileInfo(params);
   openFile->LoadFile();
   UI->mData->mSelectedModel->mOpenedC3dFile = openFile;

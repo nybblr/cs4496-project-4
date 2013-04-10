@@ -31,7 +31,7 @@ class Model
   int GetHandleCount(){
     return mHandleList.size();
   };
-  
+
   virtual void DrawSkeleton(){};
   virtual void DrawSkeleton(int frame){};
   virtual void DrawVisualization(){};
