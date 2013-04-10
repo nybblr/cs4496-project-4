@@ -39,11 +39,6 @@ Translate::Translate( istream& in, DofList* dofs )
     }
 }
 
-Mat4d Translate::GetDeriv(int dof)
-{
-  Mat4d m=vl_zero; return m;
-}
-
 void Translate::MakeDofs( char* name, DofList& dofs, Vec3d range)
 {
   int name_len = 3+strlen( name );
@@ -83,4 +78,11 @@ Mat4d Translate::GetTransform()
   m[3][3] = 1;
 
   return m;
+}
+
+Mat4d Translate::GetDeriv(int dof)
+{
+  // zero matrix with only a 1 in the DOF's cell
+  Mat4d m=vl_zero;
+  m[dof][3] = 1;
 }

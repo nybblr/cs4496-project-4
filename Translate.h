@@ -15,7 +15,7 @@ class Translate;
 class TranslateDof : public Dof
 {
  public:
- TranslateDof( char* name, double min, double max, int dim, int id, Translate& translate ) 
+ TranslateDof( char* name, double min, double max, int dim, int id, Translate& translate )
    : Dof( name, min, max, id), mDim( dim ), mTranslate( translate ) {}
 
   virtual double GetTransformValue();
@@ -36,7 +36,7 @@ class Translate : public Transform
     mIndex = 0;
     ZeroDofs();
   }
- Translate( double x, double y, double z ) : mOffset(x,y,z) { 
+ Translate( double x, double y, double z ) : mOffset(x,y,z) {
     mIndex = 0;
     ZeroDofs();
   }
@@ -45,9 +45,9 @@ class Translate : public Transform
   virtual ~Translate(){};
 
   // from Transform
-  virtual void Apply(); 
+  virtual void Apply();
   virtual Mat4d GetTransform();
-        
+
   virtual bool IsDof() { return (mDofs[0]!= 0); }
   virtual int GetDofCount() { return 3; }
   virtual Dof* GetDof( int dof ) { return mDofs[dof]; }
@@ -63,14 +63,14 @@ class Translate : public Transform
 
   TranslateDof* mDofs[3];
   Vec3d mOffset;
-        
+
 };
 
 inline double TranslateDof::GetTransformValue(){
   return mTranslate.Get(mDim);
 }
 inline void TranslateDof::SetTransformValue(double value){
-  mTranslate.Set(mDim, value); 
+  mTranslate.Set(mDim, value);
 }
 
 #endif
