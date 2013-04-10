@@ -67,7 +67,9 @@ void LoadModel(void *v)
 void Solution(void *v)
 {
     cout << "TODO: Solve inverse kinematics problem" << endl;
-    cout << UI->mData->mSelectedModel->mDofList.mDofs[0] << endl;
+    for (int i = 0; i < UI->mData->mSelectedModel->GetDofCount(); i++) {
+      cout << UI->mData->mSelectedModel->mDofList.mDofs[i] << endl;
+    }
     bool test = UI->mData->mSelectedModel->mLimbs[0]->mTransforms[0]->IsDof();
 }
 
