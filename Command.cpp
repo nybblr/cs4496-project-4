@@ -68,11 +68,14 @@ void Solution(void *v)
 {
     cout << "TODO: Solve inverse kinematics problem" << endl;
 
-    int numDofs = UI->mData->mSelectedModel->GetDofCount();
-    int numCons = UI->mData->mSelectedModel->GetHandleCount() * 3;
+    Model* model = UI->mData->mSelectedModel;
 
-    Matd J;
-    J.SetSize(numCons, UI->mData->mSelectedModel->GetDofCount());
+    int numDofs = model->GetDofCount();
+    int numCons = model->GetHandleCount() * 3;
+
+    model->ComputeJacobian();
+
+    Matd J = model->mJacobian;
 
     cout << "The Jacobian will be " << numCons << " by " << numDofs << endl;
 

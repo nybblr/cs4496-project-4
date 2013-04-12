@@ -23,6 +23,7 @@ MAIN_OBJS = \
 	Dof.o \
 	Main.o \
 	Marker.o \
+	Model.o \
 	TransformNode.o \
 	$(NULL)
 
