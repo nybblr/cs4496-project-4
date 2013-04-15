@@ -3,11 +3,11 @@
 
 #ifndef __NODE_H__
 #include "Node.h"
-#endif	//__NODE_H__
+#endif //__NODE_H__
 
 #ifndef __MARKER_H__
 #include "Marker.h"
-#endif	//__MARKER_H__
+#endif //__MARKER_H__
 
 #include <stdarg.h>
 
@@ -18,17 +18,17 @@ class TransformNode : public Node
 {
  public:
   TransformNode() : mName(0){
-    mCurrentTransform = vl_I; 
+    mCurrentTransform = vl_I;
   }
   // the other args should be Transform*'s, followed by 0
   TransformNode( Node* child, Transform* t1=0 ... );
   TransformNode( int index, Node* child, Transform* t1=0 ... );
   TransformNode( char* name, Node* child, Transform* t1=0 ... );
   TransformNode(char* name);
-		
-  void AddChild( Node* child ){ 
-    mChildren.push_back(child); 
-    std::vector<int> *newVec = new std::vector<int>; 
+
+  void AddChild( Node* child ){
+    mChildren.push_back(child);
+    std::vector<int> *newVec = new std::vector<int>;
   }
   void AddMarker(Marker *marker) {mHandles.push_back(marker);}
   void AddTransform( Transform* t ) { mTransforms.push_back( t ); }
@@ -46,13 +46,15 @@ class TransformNode : public Node
     return *mMass;
   }
 
+  virtual Vec3d ComputeJacobian(Matd* jac, C3dFileInfo* c3d, int frameNum);
+
   char* mName;
   Mat4d mParentTransform;  // transformation chain from the root to the parent node; updated by SetDofs()
   Mat4d mLocalTransform; // local transformations (including fixed translation from the parent node); updated by SetDofs()
   Mat4d mCurrentTransform; // mParentTransform * mLocalTransform; updated by SetDofs()
   std::vector<Transform*> mTransforms; // list of pointers to transformations associated with this node
   std::vector<Node*> mChildren; // list of pointers to children nodes
-  std::vector<Node *> mPrimitive; 
+  std::vector<Node *> mPrimitive;
   std::vector<Marker *> mHandles; // list of handles on this node
   double *mMass;
   TransformNode *mParentNode; // handy pointer to the parent node

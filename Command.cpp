@@ -73,7 +73,8 @@ void Solution(void *v)
     int numDofs = model->GetDofCount();
     int numCons = model->GetHandleCount() * 3;
 
-    model->ComputeJacobian();
+    int frameNum = 0;
+    model->ComputeJacobian(frameNum);
 
     Matd J = model->mJacobian;
 

@@ -7,36 +7,36 @@
 #define C3D_REC_SIZE   512
 
 typedef struct c3d_head_t {
-	unsigned char	prec_start;
-	unsigned char	key;
-	short	pnt_cnt;
-	short	a_channels;
-	short	start_frame;
-	short	end_frame;
-	short	int_gap;
-	float	scale;
-	short	rec_start;
-	short	a_frames;
-	float	freq;
-	short	stuff[244];	
+  unsigned char prec_start;
+  unsigned char key;
+  short pnt_cnt;
+  short a_channels;
+  short start_frame;
+  short end_frame;
+  short int_gap;
+  float scale;
+  short rec_start;
+  short a_frames;
+  float freq;
+  short stuff[244];
 } c3d_head;
 
 typedef struct c3d_param_t {
-	unsigned char	reserved[2];
-	unsigned char	pblocks;
-	unsigned char	ftype;
-	char stuff[C3D_REC_SIZE-4];	
+  unsigned char reserved[2];
+  unsigned char pblocks;
+  unsigned char ftype;
+  char stuff[C3D_REC_SIZE-4];
 } c3d_param;
 
 typedef struct c3d_frameSI_t {
-	short	x, y, z;
-	unsigned char	cam_byte;
-	unsigned char	residual;
+  short x, y, z;
+  unsigned char cam_byte;
+  unsigned char residual;
 } c3d_frameSI;
 
 typedef struct c3d_frame_t {
-	float	x, y, z;
-	float	residual;
+  float x, y, z;
+  float residual;
 } c3d_frame;
 
 
@@ -49,10 +49,10 @@ class C3dFileInfo
   char *mFileName;
 
   int GetFrameCount(){
-    return mNumFrames;	
+    return mNumFrames;
   }
 
-  int GetHandleCount(){ 
+  int GetHandleCount(){
     return mNumHandles;
   }
 
