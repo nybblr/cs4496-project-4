@@ -181,26 +181,28 @@ void TransformNode::UpdateUpMatrix(Mat4d currTransform, Mat4d invHeadMatrix)
     mPrimitive[i]->UpdateUpMatrix(currTransform, invHeadMatrix);
 }
 
-std::vector<Vec4d> TransformNode::ComputeJacobian(Matd* J, C3dFileInfo* c3d, int frameNum) {
+std::vector<Vec4d*> TransformNode::ComputeJacobian(Matd* J, C3dFileInfo* c3d, int frameNum) {
 	// Initialize handles list (transformed)
-	std::vector<Vec4d> hLocals;
-	// for (int i = 0; i < hLocals.size(); i++) {
-	// 	hLocals[i] = Vec4d();
-	// }
+	std::vector<Vec4d*> hLocals (c3d->GetHandleCount());
+	for (int i = 0; i < hLocals.size(); i++) {
+		hLocals[i] = (Vec4d*)NULL;
+	}
 
 	// Call all children first
 	for (int i = 0; i < mChildren.size(); i++) {
 		// We should get all child handles and their transforms
-		std::vector<Vec4d> cLocals = static_cast<TransformNode*>(mChildren[i])->ComputeJacobian(J, c3d, frameNum);
+		std::vector<Vec4d*> cLocals = static_cast<TransformNode*>(mChildren[i])->ComputeJacobian(J, c3d, frameNum);
 		// Copy handle transforms
 		for (int j = 0; j < cLocals.size(); j++) {
-			hLocals.push_back(cLocals[j]);
+			if (cLocals[j] != (Vec4d*)NULL) {
+				hLocals[j] = cLocals[j];
+			}
 		}
 	}
 
 	// Now add all our handles to the list
 	for (int i = 0; i < mHandles.size(); i++) {
-		hLocals[mHandles[i]->mMarkerOrder] = Vec4d(mHandles[i]->mOffset, 1);
+		hLocals[mHandles[i]->mMarkerOrder] = new Vec4d(mHandles[i]->mOffset, 1);
 	}
 
 	for (int i = 0; i < GetSize(); i++) {
@@ -227,11 +229,15 @@ std::vector<Vec4d> TransformNode::ComputeJacobian(Matd* J, C3dFileInfo* c3d, int
 
 			// Now the partial transforms of all handles
 			// on children is populated on model for use.
-			for (int k = 0; k < hLocals.size(); k++) {
+			for (int r = 0; r < hLocals.size(); r++) {
 				// Make homogeneous coordinate of child handles
 				// Vec4d h = Vec4d(c3d->GetMarkerPos(frameNum, r), 1);
-				Vec4d h = T * hLocals[k];
-				int r = hLocals[k].mMarkerOrder;
+				Vec4d h = vl_zero;
+				if (hLocals[r] != (Vec4d*)NULL)
+					h = *hLocals[r];
+
+				// Derivative transform
+				h = T * h;
 
 				// Each row is an x,y, or z of a handle
 				// All child handles use the transform
@@ -242,5 +248,12 @@ std::vector<Vec4d> TransformNode::ComputeJacobian(Matd* J, C3dFileInfo* c3d, int
 			}
 		}
 	}
+
+	// Now apply local transform to all handles
+	for (int i = 0; i < hLocals.size(); i++) {
+		Vecd* ht = mLocalTransform * hLocals[i];
+		hLocals[i] = ht;
+	}
+
   return hLocals;
 }

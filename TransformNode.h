@@ -50,7 +50,7 @@ class TransformNode : public Node
     return *mMass;
   }
 
-  virtual std::vector<Vec4d> ComputeJacobian(Matd* J, C3dFileInfo* c3d, int frameNum);
+  virtual std::vector<Vec4d*> ComputeJacobian(Matd* J, C3dFileInfo* c3d, int frameNum);
 
   char* mName;
   Mat4d mParentTransform;  // transformation chain from the root to the parent node; updated by SetDofs()

@@ -15,7 +15,7 @@ class Node
   virtual ~Node() {}
   virtual void UpdateUpMatrix(Mat4d, Mat4d){}
 
-  virtual std::vector<Vec4d> ComputeJacobian(Matd* J, C3dFileInfo* c3d, int frameNum);
+  virtual std::vector<Vec4d*> ComputeJacobian(Matd* J, C3dFileInfo* c3d, int frameNum);
 
   Vec3d mColor;
   int mIndex;
