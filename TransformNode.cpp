@@ -6,13 +6,13 @@
 #include "Transform.h"
 #endif //__TRANSFORM_H__
 
+#ifndef __DOF_H__
+#include "Dof.h"
+#endif //__DOF_H__
+
 #ifndef __GLPRIMITIVES_H__
 #include "GLPrimitives.h"
 #endif //__GLPRIMITIVES_H__
-
-#ifndef __C3DFILEINFO_H__
-#include "C3dFileInfo.h"
-#endif //__C3DFILEINFO_H__
 
 
 #include <FL/gl.h>
@@ -181,6 +181,66 @@ void TransformNode::UpdateUpMatrix(Mat4d currTransform, Mat4d invHeadMatrix)
     mPrimitive[i]->UpdateUpMatrix(currTransform, invHeadMatrix);
 }
 
-Vec3d TransformNode::ComputeJacobian(Matd* jac, C3dFileInfo* c3d, int frameNum) {
-  return Vec3d();
+std::vector<Vec4d> TransformNode::ComputeJacobian(Matd* J, C3dFileInfo* c3d, int frameNum) {
+	// Initialize handles list (transformed)
+	std::vector<Vec4d> hLocals;
+	// for (int i = 0; i < hLocals.size(); i++) {
+	// 	hLocals[i] = Vec4d();
+	// }
+
+	// Call all children first
+	for (int i = 0; i < mChildren.size(); i++) {
+		// We should get all child handles and their transforms
+		std::vector<Vec4d> cLocals = static_cast<TransformNode*>(mChildren[i])->ComputeJacobian(J, c3d, frameNum);
+		// Copy handle transforms
+		for (int j = 0; j < cLocals.size(); j++) {
+			hLocals.push_back(cLocals[j]);
+		}
+	}
+
+	// Now add all our handles to the list
+	for (int i = 0; i < mHandles.size(); i++) {
+		hLocals[mHandles[i]->mMarkerOrder] = Vec4d(mHandles[i]->mOffset, 1);
+	}
+
+	for (int i = 0; i < GetSize(); i++) {
+		for (int j = 0; j < mTransforms[i]->GetDofCount(); j++) {
+			// Which column of J should this DOF be in?
+			int c = mTransforms[i]->GetDof(j)->mId;
+			
+			// Derivative of this local transform
+			// Some transforms have many DOFs
+			// Multiply all transforms;
+			// If we come to this current transform i,
+			// Take the derivative of it with respect to jth DOF.
+			// Otherwise, just get regular transform
+			Mat4d T = vl_I;
+			for (int k = 0; k < GetSize(); k++) {
+				if (k == i)
+					T *= mTransforms[i]->GetDeriv(j);
+				else
+					T *= mTransforms[i]->GetTransform();
+			}
+
+			// Now T is our local transform with derivative
+			// taken with respect to the jth DOF.
+
+			// Now the partial transforms of all handles
+			// on children is populated on model for use.
+			for (int k = 0; k < hLocals.size(); k++) {
+				// Make homogeneous coordinate of child handles
+				// Vec4d h = Vec4d(c3d->GetMarkerPos(frameNum, r), 1);
+				Vec4d h = T * hLocals[k];
+				int r = hLocals[k].mMarkerOrder;
+
+				// Each row is an x,y, or z of a handle
+				// All child handles use the transform
+				// Otherwise, all 0s are output
+				(*J)[r*3+0][c] = h[0];
+				(*J)[r*3+1][c] = h[1];
+				(*J)[r*3+2][c] = h[2];
+			}
+		}
+	}
+  return hLocals;
 }

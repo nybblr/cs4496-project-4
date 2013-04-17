@@ -9,6 +9,10 @@
 #include "Marker.h"
 #endif //__MARKER_H__
 
+#ifndef __C3DFILEINFO_H__
+#include "C3dFileInfo.h"
+#endif //__C3DFILEINFO_H__
+
 #include <stdarg.h>
 
 class Transform;
@@ -46,7 +50,7 @@ class TransformNode : public Node
     return *mMass;
   }
 
-  virtual Vec3d ComputeJacobian(Matd* jac, C3dFileInfo* c3d, int frameNum);
+  virtual std::vector<Vec4d> ComputeJacobian(Matd* J, C3dFileInfo* c3d, int frameNum);
 
   char* mName;
   Mat4d mParentTransform;  // transformation chain from the root to the parent node; updated by SetDofs()
