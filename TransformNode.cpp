@@ -209,7 +209,7 @@ std::vector<Vec4d*> TransformNode::ComputeJacobian(Matd* J, C3dFileInfo* c3d, in
     for (int j = 0; j < mTransforms[i]->GetDofCount(); j++) {
       // Which column of J should this DOF be in?
       int c = mTransforms[i]->GetDof(j)->mId;
-      
+
       // Derivative of this local transform
       // Some transforms have many DOFs
       // Multiply all transforms;
