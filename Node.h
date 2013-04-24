@@ -1,6 +1,10 @@
 #ifndef __NODE_H__
 #define __NODE_H__
 
+#ifndef __C3DFILEINFO_H__
+#include "C3dFileInfo.h"
+#endif //__C3DFILEINFO_H__
+
 #include <vector>
 #include "vl/VLd.h"
 #include <iostream>
@@ -15,7 +19,7 @@ class Node
   virtual ~Node() {}
   virtual void UpdateUpMatrix(Mat4d, Mat4d){}
 
-  virtual std::vector<Vec4d*> ComputeJacobian(Matd* J, C3dFileInfo* c3d, int frameNum);
+  virtual std::vector<Vec4d*> ComputeJacobian(Matd* J, C3dFileInfo* c3d, int frameNum){}
 
   Vec3d mColor;
   int mIndex;

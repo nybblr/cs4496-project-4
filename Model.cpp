@@ -14,5 +14,5 @@ void Model::ComputeJacobian(int frameNum)
   // Each limb calls its children asking them to fill it it in.
   // When they return, add your own entry for all constraints and your DOFs.
 
-  mLimbs.front()->ComputeJacobian(&mJacobian, mOpenedC3dFile, frameNum);
+  std::vector<Vec4d*> handles = mLimbs.front()->ComputeJacobian(&mJacobian, mOpenedC3dFile, frameNum);
 }
