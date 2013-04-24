@@ -21,3 +21,7 @@
 /release
 /rtik
 /rtik_debug
+
+# Environment
+.project
+.cproject
