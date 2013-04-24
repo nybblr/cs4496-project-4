@@ -251,8 +251,8 @@ std::vector<Vec4d*> TransformNode::ComputeJacobian(Matd* J, C3dFileInfo* c3d, in
 
 	// Now apply local transform to all handles
 	for (int i = 0; i < hLocals.size(); i++) {
-		Vecd* ht = mLocalTransform * hLocals[i];
-		hLocals[i] = ht;
+		Vec4d ht = mLocalTransform * *hLocals[i];
+		hLocals[i] = &ht;
 	}
 
   return hLocals;
