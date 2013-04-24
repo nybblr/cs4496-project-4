@@ -15,7 +15,7 @@ using namespace std;
 const double EPSILON = 0.0000001;
 
 const Vec4d G(0.0, 9.8, 0.0, 0.0);
- 
+
 ArticulatedBody::ArticulatedBody()
 {
   mMarkerCount = 0;
@@ -24,7 +24,7 @@ ArticulatedBody::ArticulatedBody()
 }
 
 ArticulatedBody::~ArticulatedBody()
-{ 
+{
   for(int i = 0; i < mNodeCount; i++)
     delete mLimbs[i];
 }
@@ -40,7 +40,7 @@ void ArticulatedBody::SetDofs(Matd &frames, int frameNum)
   Mat4d invHeadMatrix = vl_I;
   for(int i = 0; i < ((TransformNode*)mChildren[0])->mTransforms.size(); i++)
     invHeadMatrix *= ((TransformNode*)mChildren[0])->mTransforms[i]->GetTransform();
-	
+
   invHeadMatrix = inv(invHeadMatrix);
   UpdateUpMatrix(Mat4d(vl_I), invHeadMatrix);
 }
@@ -59,11 +59,11 @@ void ArticulatedBody::SetDofs(Vecd &Q)
 void ArticulatedBody::DrawSkeleton()
 {
   TransformNode::Draw();
-  
+
   Mat4d invHeadMatrix = vl_I;
   for(int i = 0; i < ((TransformNode*)mChildren[0])->mTransforms.size(); i++)
     invHeadMatrix *= ((TransformNode*)mChildren[0])->mTransforms[i]->GetTransform();
-	
+
   invHeadMatrix = inv(invHeadMatrix);
   UpdateUpMatrix(Mat4d(vl_I), invHeadMatrix);
 
@@ -81,17 +81,17 @@ void ArticulatedBody::DrawVisualization()
 
 void ArticulatedBody::InitModel()
 {
-  mMarkerCount = mHandleList.size();	
+  mMarkerCount = mHandleList.size();
   mNodeCount = mLimbs.size();
- 
+
   Mat4d invHeadMatrix = vl_I;
   for(int i = 0; i < ((TransformNode*)mChildren[0])->mTransforms.size(); i++)
     invHeadMatrix *= ((TransformNode*)mChildren[0])->mTransforms[i]->GetTransform();
   invHeadMatrix = inv(invHeadMatrix);
-  UpdateUpMatrix(vl_I, invHeadMatrix);  
+  UpdateUpMatrix(vl_I, invHeadMatrix);
 
   mRoot = (TransformNode*)mChildren[0];
-  
+
   int nDof = GetDofCount();
   Vecd dofVec;
   dofVec.SetSize(nDof);
@@ -109,4 +109,15 @@ void ArticulatedBody::ParentPointer(TransformNode *node)
         ((TransformNode*)node->mChildren[i])->mParentNode = node;
         ParentPointer((TransformNode*)node->mChildren[i]);
     }
+}
+
+void ArticulatedBody::ComputeJacobian(int frameNum)
+{
+  mJacobian.SetSize(GetDofCount(), GetHandleCount() * 3);
+
+  // High level: call limb asking it to fill in part of the Jacobian
+  // Each limb calls its children asking them to fill it it in.
+  // When they return, add your own entry for all constraints and your DOFs.
+
+  std::vector<Vec4d*> handles = mRoot->ComputeJacobian(&mJacobian, mOpenedC3dFile, frameNum);
 }

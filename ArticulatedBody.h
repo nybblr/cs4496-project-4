@@ -23,7 +23,7 @@
 class Marker;
 
 class ArticulatedBody: public TransformNode, public Model
-{		
+{
  public:
 
   //handy pointers
@@ -61,9 +61,11 @@ class ArticulatedBody: public TransformNode, public Model
 
   virtual void SetDofs(Vecd &dQ);
   virtual void SetDofs(Matd &frames, int frameNum);
-		
+
   virtual void InitModel();
   void ParentPointer(TransformNode *parent);
+
+  virtual void ComputeJacobian(int frameNum);
 
 };
 

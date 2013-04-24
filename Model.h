@@ -38,7 +38,7 @@ class Model
 
   virtual void InitModel(){};
 
-  virtual void ComputeJacobian(int frameNum);
+  virtual void ComputeJacobian(int frameNum){}
 
   DofList mDofList; // the list of dofs; updated by SetDofs()
   std::vector<TransformNode*> mLimbs; // the list of body nodes that comprises the skeleton
