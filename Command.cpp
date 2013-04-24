@@ -66,8 +66,6 @@ void LoadModel(void *v)
 
 void Solution(void *v)
 {
-    cout << "TODO: Solve inverse kinematics problem" << endl;
-
     Model* model = UI->mData->mSelectedModel;
 
     int numDofs = model->GetDofCount();
