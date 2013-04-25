@@ -67,21 +67,40 @@ void LoadModel(void *v)
 void Solution(void *v)
 {
     Model* model = UI->mData->mSelectedModel;
+    C3dFileInfo* c3d = model->mOpenedC3dFile;
 
     int numDofs = model->GetDofCount();
     int numCons = model->GetHandleCount() * 3;
 
     int frameNum = 0;
-    model->ComputeJacobian(frameNum);
+
+    cout << "The Jacobian will be " << numCons << " by " << numDofs << endl;
+
+    std::vector<Vec4d*> handles = model->ComputeJacobian(frameNum);
 
     Matd J = model->mJacobian;
 
-    cout << "The Jacobian will be " << numCons << " by " << numDofs << endl;
+    Matd Jt = trans(J);
+
+    Matd C;
+    C.SetSize(model->GetHandleCount() * 3, 1);
+
+    for (int i = 0; i < model->GetHandleCount(); i++) {
+      for (int j = 0; j < 3; j++) {
+        cout << "Prevec " << i << ":" << j << C << endl;
+        Vec4d v = *(handles[i]);
+        double h = v[j];
+        double m = c3d->GetMarkerPos(frameNum, i)[j];
+        cout << "Calculated m" << endl;
+        C[i*3 + j] = h - m;
+      }
+    }
+
+    cout << "Objective vector " << C << endl;
 
     for (int i = 0; i < UI->mData->mSelectedModel->GetDofCount(); i++) {
       cout << UI->mData->mSelectedModel->mDofList.mDofs[i]->GetName() << endl;
     }
-    bool test = UI->mData->mSelectedModel->mLimbs[0]->mTransforms[0]->IsDof();
 }
 
 void Exit(void *v)

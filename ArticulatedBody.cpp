@@ -111,7 +111,7 @@ void ArticulatedBody::ParentPointer(TransformNode *node)
     }
 }
 
-void ArticulatedBody::ComputeJacobian(int frameNum)
+std::vector<Vec4d*> ArticulatedBody::ComputeJacobian(int frameNum)
 {
   mJacobian.SetSize(GetHandleCount() * 3, GetDofCount());
 
@@ -121,4 +121,6 @@ void ArticulatedBody::ComputeJacobian(int frameNum)
 
   std::vector<Vec4d*> handles = mRoot->ComputeJacobian(&mJacobian, mOpenedC3dFile, frameNum);
   std::cout << mJacobian << std::endl;
+
+  return handles;
 }

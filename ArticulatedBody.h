@@ -65,7 +65,7 @@ class ArticulatedBody: public TransformNode, public Model
   virtual void InitModel();
   void ParentPointer(TransformNode *parent);
 
-  virtual void ComputeJacobian(int frameNum);
+  virtual std::vector<Vec4d*> ComputeJacobian(int frameNum);
 
 };
 
