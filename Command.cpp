@@ -77,34 +77,39 @@ void Solution(void *v)
 
     cout << "The Jacobian will be " << numCons << " by " << numDofs << endl;
 
-    std::vector<Vec4d*> handles = model->ComputeJacobian(frameNum);
+    for (int i = 0; i < 1000; i++) {
+      std::vector<Vec4d*> handles = model->ComputeJacobian(frameNum);
 
-    Matd J = model->mJacobian;
+      Matd J = model->mJacobian;
 
-    Matd Jt = trans(J);
+      Matd Jt = trans(J);
 
-    Vecd C;
-    C.SetSize(numCons);
+      Vecd C;
+      C.SetSize(numCons);
 
-    for (int i = 0; i < model->GetHandleCount(); i++) {
-      for (int j = 0; j < 3; j++) {
-        // cout << "Prevec " << i << ":" << j << C << endl;
-        Vec4d v = *(handles[i]);
-        double h = v[j];
-        double m = c3d->GetMarkerPos(frameNum, i)[j];
-        // cout << "Calculated m" << endl;
-        C[i*3 + j] = h - m;
+      for (int i = 0; i < model->GetHandleCount(); i++) {
+        for (int j = 0; j < 3; j++) {
+          // cout << "Prevec " << i << ":" << j << C << endl;
+          Vec4d v = *(handles[i]);
+          // cout << "Homogeneous " << v << endl;
+          double h = v[j]/v[3];
+          double m = c3d->GetMarkerPos(frameNum, i)[j];
+          // cout << "Calculated m" << endl;
+          C[i*3 + j] = h - m;
+        }
       }
+
+      // cout << "Objective vector " << C << endl;
+
+      Vecd dF = 2 * Jt * C;
+
+      Vecd q;
+      q.SetSize(numDofs);
+      model->mDofList.GetDofs(&q);
+      Vecd qnew = q - alpha*dF;
+
+      model->SetDofs(qnew);
     }
-
-    cout << "Objective vector " << C << endl;
-
-    Vecd dF = 2 * Jt * C;
-
-    Vecd q;
-    q.SetSize(numDofs);
-    model->mDofList.GetDofs(&q);
-    Vecd qnew = q - alpha*dF;
 
     for (int i = 0; i < UI->mData->mSelectedModel->GetDofCount(); i++) {
       cout << UI->mData->mSelectedModel->mDofList.mDofs[i]->GetName() << endl;

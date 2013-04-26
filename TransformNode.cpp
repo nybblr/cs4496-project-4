@@ -188,7 +188,7 @@ std::vector<Vec4d*> TransformNode::ComputeJacobian(Matd* J, C3dFileInfo* c3d, in
     hLocals[i] = (Vec4d*)NULL;
   }
 
-  std::cout << mName << " Working on TransformNode " << std::endl;
+  // std::cout << mName << " Working on TransformNode " << std::endl;
 
   // Call all children first
   for (int i = 0; i < mChildren.size(); i++) {
@@ -197,25 +197,32 @@ std::vector<Vec4d*> TransformNode::ComputeJacobian(Matd* J, C3dFileInfo* c3d, in
     // Copy handle transforms
     for (int j = 0; j < cLocals.size(); j++) {
       if (cLocals[j] != (Vec4d*)NULL) {
-        hLocals[j] = cLocals[j];
+        hLocals[j] = new Vec4d(*cLocals[j]);
       }
     }
   }
 
-  std::cout << mName << " Called children of " << std::endl;
+  // std::cout << mName << " Called children of " << std::endl;
 
   // Now add all our handles to the list
   for (int i = 0; i < mHandles.size(); i++) {
     hLocals[mHandles[i]->mMarkerOrder] = new Vec4d(mHandles[i]->mOffset, 1);
   }
 
-  std::cout << mName << " Added our handles on " << std::endl;
+  // std::cout << mName << " has handle list:" << std::endl;
+  // for (int i = 0; i < hLocals.size(); i++) {
+  //   if (hLocals[i] != (Vec4d*)NULL) {
+  //     std::cout << *hLocals[i] << std::endl;
+  //   } else {
+  //     std::cout << "NULL" << std::endl;
+  //   }
+  // }
 
   for (int i = 0; i < GetSize(); i++) {
     if (!mTransforms[i]->IsDof()) continue;
 
     for (int j = 0; j < mTransforms[i]->GetDofCount(); j++) {
-      std::cout << mName << " Working on " << i << " transform " << j << " DOF" << std::endl;
+      // std::cout << mName << " Working on " << i << " transform " << j << " DOF" << std::endl;
       // Which column of J should this DOF be in?
       Transform* trans = mTransforms[i];
       int c = trans->GetDof(j)->mId;
@@ -263,8 +270,8 @@ std::vector<Vec4d*> TransformNode::ComputeJacobian(Matd* J, C3dFileInfo* c3d, in
   for (int i = 0; i < hLocals.size(); i++) {
     if (hLocals[i] == (Vec4d*)NULL) continue;
 
-    Vec4d ht = mLocalTransform * *hLocals[i];
-    hLocals[i] = &ht;
+    Vec4d* ht = new Vec4d(mLocalTransform * *hLocals[i]);
+    hLocals[i] = ht;
   }
 
   return hLocals;
