@@ -73,6 +73,7 @@ void Solution(void *v)
     int numCons = model->GetHandleCount() * 3;
 
     int frameNum = 0;
+    double alpha = 0.1;
 
     cout << "The Jacobian will be " << numCons << " by " << numDofs << endl;
 
@@ -82,21 +83,28 @@ void Solution(void *v)
 
     Matd Jt = trans(J);
 
-    Matd C;
-    C.SetSize(model->GetHandleCount() * 3, 1);
+    Vecd C;
+    C.SetSize(numCons);
 
     for (int i = 0; i < model->GetHandleCount(); i++) {
       for (int j = 0; j < 3; j++) {
-        cout << "Prevec " << i << ":" << j << C << endl;
+        // cout << "Prevec " << i << ":" << j << C << endl;
         Vec4d v = *(handles[i]);
         double h = v[j];
         double m = c3d->GetMarkerPos(frameNum, i)[j];
-        cout << "Calculated m" << endl;
+        // cout << "Calculated m" << endl;
         C[i*3 + j] = h - m;
       }
     }
 
     cout << "Objective vector " << C << endl;
+
+    Vecd dF = 2 * Jt * C;
+
+    Vecd q;
+    q.SetSize(numDofs);
+    model->mDofList.GetDofs(&q);
+    Vecd qnew = q - alpha*dF;
 
     for (int i = 0; i < UI->mData->mSelectedModel->GetDofCount(); i++) {
       cout << UI->mData->mSelectedModel->mDofList.mDofs[i]->GetName() << endl;
