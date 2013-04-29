@@ -241,6 +241,9 @@ std::vector<Vec4d*> TransformNode::ComputeJacobian(Matd* J, C3dFileInfo* c3d, in
           T *= mTransforms[i]->GetTransform();
       }
 
+      T = mParentTransform * T;
+      cout << T << endl;
+
       // Now T is our local transform with derivative
       // taken with respect to the jth DOF.
 
@@ -259,9 +262,9 @@ std::vector<Vec4d*> TransformNode::ComputeJacobian(Matd* J, C3dFileInfo* c3d, in
         // Each row is an x,y, or z of a handle
         // All child handles use the transform
         // Otherwise, all 0s are output
-        (*J)[r*3+0][c] = h[0];
-        (*J)[r*3+1][c] = h[1];
-        (*J)[r*3+2][c] = h[2];
+        (*J)[r*3+0][c] = h[0]/h[3];
+        (*J)[r*3+1][c] = h[1]/h[3];
+        (*J)[r*3+2][c] = h[2]/h[3];
       }
     }
   }

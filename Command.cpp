@@ -77,12 +77,14 @@ void Solution(void *v)
 
     cout << "The Jacobian will be " << numCons << " by " << numDofs << endl;
 
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < 1; i++) {
       std::vector<Vec4d*> handles = model->ComputeJacobian(frameNum);
 
       Matd J = model->mJacobian;
 
       Matd Jt = trans(J);
+
+      // cout << Jt << endl;
 
       Vecd C;
       C.SetSize(numCons);
