@@ -44,6 +44,6 @@ class Model
   std::vector<TransformNode*> mLimbs; // the list of body nodes that comprises the skeleton
   std::vector<Marker*> mHandleList; // the list of markers on the skeleton
   C3dFileInfo* mOpenedC3dFile; // the pointer to C3D file
-  Matd mJacobian;
+  Matd* mJacobian;
 };
 #endif

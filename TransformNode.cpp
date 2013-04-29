@@ -219,12 +219,14 @@ std::vector<Vec4d*> TransformNode::ComputeJacobian(Matd* J, C3dFileInfo* c3d, in
   // }
 
   for (int i = 0; i < GetSize(); i++) {
-    if (!mTransforms[i]->IsDof()) continue;
+    Transform* trans = mTransforms[i];
+    // cout << trans->GetDeriv(0) << endl;
+
+    if (!trans->IsDof()) continue;
 
     for (int j = 0; j < mTransforms[i]->GetDofCount(); j++) {
       // std::cout << mName << " Working on " << i << " transform " << j << " DOF" << std::endl;
       // Which column of J should this DOF be in?
-      Transform* trans = mTransforms[i];
       int c = trans->GetDof(j)->mId;
 
       // Derivative of this local transform
@@ -242,9 +244,9 @@ std::vector<Vec4d*> TransformNode::ComputeJacobian(Matd* J, C3dFileInfo* c3d, in
       }
 
       T = mParentTransform * T;
-      cout << T << endl;
+      // cout << mName << T << endl;
 
-      // Now T is our local transform with derivative
+      // Now T is our entire transform with derivative
       // taken with respect to the jth DOF.
 
       // Now the partial transforms of all handles
@@ -252,7 +254,7 @@ std::vector<Vec4d*> TransformNode::ComputeJacobian(Matd* J, C3dFileInfo* c3d, in
       for (int r = 0; r < hLocals.size(); r++) {
         // Make homogeneous coordinate of child handles
         // Vec4d h = Vec4d(c3d->GetMarkerPos(frameNum, r), 1);
-        Vec4d h = vl_zero;
+        Vec4d h = Vec4d(0,0,0,1);
         if (hLocals[r] != (Vec4d*)NULL)
           h = *hLocals[r];
 
@@ -262,9 +264,9 @@ std::vector<Vec4d*> TransformNode::ComputeJacobian(Matd* J, C3dFileInfo* c3d, in
         // Each row is an x,y, or z of a handle
         // All child handles use the transform
         // Otherwise, all 0s are output
-        (*J)[r*3+0][c] = h[0]/h[3];
-        (*J)[r*3+1][c] = h[1]/h[3];
-        (*J)[r*3+2][c] = h[2]/h[3];
+        (*J)[r*3+0][c] = h[0];///h[3]
+        (*J)[r*3+1][c] = h[1];///h[3]
+        (*J)[r*3+2][c] = h[2];///h[3]
       }
     }
   }
