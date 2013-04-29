@@ -73,7 +73,7 @@ void Solution(void *v)
     int numCons = model->GetHandleCount() * 3;
 
     int frameNum = 0;
-    double alpha = 0.1;
+    double alpha = 0.02;
 
     cout << "The Jacobian will be " << numCons << " by " << numDofs << endl;
 
