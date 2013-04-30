@@ -193,7 +193,7 @@ std::vector<Vec4d*> TransformNode::ComputeJacobian(Matd* J, C3dFileInfo* c3d, in
   // Call all children first
   for (int i = 0; i < mChildren.size(); i++) {
     // We should get all child handles and their transforms
-    std::vector<Vec4d*> cLocals = static_cast<TransformNode*>(mChildren[i])->ComputeJacobian(J, c3d, frameNum);
+    std::vector<Vec4d*> cLocals = mChildren[i]->ComputeJacobian(J, c3d, frameNum);
     // Copy handle transforms
     for (int j = 0; j < cLocals.size(); j++) {
       if (cLocals[j] != (Vec4d*)NULL) {
