@@ -20,7 +20,7 @@ class Scale;
 class ScaleDof : public Dof
 {
  public:
- ScaleDof( char* name, double min, double max, int dim, int id, Scale& scale ) 
+ ScaleDof( char* name, double min, double max, int dim, int id, Scale& scale )
    : Dof( name, min, max, id ), mDim( dim ), mScale( scale ) {}
 
   virtual double GetTransformValue();
@@ -37,12 +37,12 @@ class ScaleDof : public Dof
 class Scale : public Transform
 {
  public:
- Scale( const Vec3d& scale ) : mScale( scale ) { 
+ Scale( const Vec3d& scale ) : mScale( scale ) {
     mIndex = 2;
     ZeroDofs();
-    mBone = 1.0;	
+    mBone = 1.0;
   }
- Scale( double x, double y, double z ) : mScale(x,y,z) { 
+ Scale( double x, double y, double z ) : mScale(x,y,z) {
     mIndex = 2;
     ZeroDofs();
     mBone = 1.0;
@@ -54,7 +54,7 @@ class Scale : public Transform
   // from Transform
   virtual void Apply() { glScaled( mScale[0], mScale[1], mScale[2] ); }
   virtual Mat4d GetTransform();
-        
+
   virtual bool IsDof() { return (mDofs[0]!=0); }
   virtual int GetDofCount() { return 3; }
   virtual Dof* GetDof( int dof ) { return mDofs[dof]; }
@@ -64,7 +64,7 @@ class Scale : public Transform
   Vec3d GetScale(){
     return mScale;
   }
-		
+
   void SetBoneLength(double bone){
     mBone = bone;
   }

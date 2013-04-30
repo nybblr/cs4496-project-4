@@ -62,7 +62,7 @@ void Scale::MakeDofs( char* name, DofList& dofs, double low_range_scalar, double
 }
 
 Mat4d Scale::GetTransform()
-{	
+{
   Mat4d m = vl_I;
   m[0][0] = mScale[0] * mBone;
   m[1][1] = mScale[1] * mBone;
