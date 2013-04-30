@@ -235,7 +235,7 @@ std::vector<Vec4d*> TransformNode::ComputeJacobian(Matd* J, C3dFileInfo* c3d, in
       // If we come to this current transform i,
       // Take the derivative of it with respect to jth DOF.
       // Otherwise, just get regular transform
-      Mat4d T = vl_I;
+      Mat4d T = mParentTransform;
       for (int k = 0; k < GetSize(); k++) {
         if (k == i)
           T *= mTransforms[i]->GetDeriv(j);
@@ -243,7 +243,6 @@ std::vector<Vec4d*> TransformNode::ComputeJacobian(Matd* J, C3dFileInfo* c3d, in
           T *= mTransforms[i]->GetTransform();
       }
 
-      T = mParentTransform * T;
       // cout << mName << T << endl;
 
       // Now T is our entire transform with derivative
