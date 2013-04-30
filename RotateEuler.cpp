@@ -196,7 +196,7 @@ Mat4d RotateEuler::GetDeriv(int dof)
 
       m[2][0] = 0;
       m[2][1] = 0;
-      m[2][2] = 1;
+      m[2][2] = 0;
       break;
     }
 

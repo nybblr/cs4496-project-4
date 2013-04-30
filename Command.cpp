@@ -95,9 +95,10 @@ void Solution(void *v)
       for (int i = 0; i < model->GetHandleCount(); i++) {
         Vec3d h = model->mHandleList[i]->mGlobalPos;
         Vec3d m = c3d->GetMarkerPos(frameNum, i);
+        Vec3d c = h - m;
 
-        F += sqrlen(h - m);
-        sub(C, i*3, 3) = h - m;
+        F += sqrlen(c);
+        sub(C, i*3, 3) = c;
       }
 
       cout << "Objective function " << F << endl;

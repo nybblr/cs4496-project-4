@@ -85,7 +85,7 @@ Mat4d Translate::GetDeriv(int dof)
   // zero matrix with only a 1 in the DOF's cell
   Mat4d m=vl_zero;
   m[dof][3] = 1;
-  // m[3][3] = 1;
+  m[3][3] = 1;
 
   return m;
 }
