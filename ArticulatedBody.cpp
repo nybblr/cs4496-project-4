@@ -114,6 +114,7 @@ void ArticulatedBody::ParentPointer(TransformNode *node)
 std::vector<Vec4d*> ArticulatedBody::ComputeJacobian(int frameNum)
 {
   mJacobian = new Matd();
+  *mJacobian = vl_0;
   mJacobian->SetSize(GetHandleCount() * 3, GetDofCount());
 
   // High level: call limb asking it to fill in part of the Jacobian

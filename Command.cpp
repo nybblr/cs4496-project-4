@@ -81,13 +81,18 @@ void Solution(void *v)
     do {
       F = 0;
 
-      std::vector<Vec4d*> handles = model->ComputeJacobian(frameNum);
+      model->ComputeJacobian(frameNum);
 
       Matd J = *model->mJacobian;
 
+      Matd Js;
+      Js = vl_0;
+      Js.SetSize(numCons, numDofs);
+      sub(Js, 0, 0, 3, numDofs) = sub(J, 0, 0, 3, numDofs);
+
       Matd Jt = trans(J);
 
-      // cout << Jt << endl;
+      cout << Jt << endl;
 
       Vecd C;
       C.SetSize(numCons);
@@ -113,10 +118,6 @@ void Solution(void *v)
 
       model->SetDofs(qnew);
     } while (F > 1E-5);
-
-    for (int i = 0; i < UI->mData->mSelectedModel->GetDofCount(); i++) {
-      cout << UI->mData->mSelectedModel->mDofList.mDofs[i]->GetName() << endl;
-    }
 }
 
 void Exit(void *v)
