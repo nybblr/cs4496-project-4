@@ -90,7 +90,7 @@ void Solution(void *v)
     Vecd qnew;
     Vecd qbest;
     int i;
-    for (int frameNum = 0; frameNum < 10; frameNum++) {
+    for (int frameNum = 0; frameNum < numFrames; frameNum++) {
       cout << "On frame " << frameNum << endl;
       i = 0;
     // for (int curr = 0; curr < model->GetHandleCount(); curr++) {
