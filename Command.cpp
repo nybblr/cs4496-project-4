@@ -79,7 +79,6 @@ void Solution(void *v)
     // int frameNum = 0;
     double alpha = 0.02;
 
-    *frames = vl_0;
     frames->SetSize(numFrames, numDofs);
     *frames = vl_0;
 
@@ -119,7 +118,7 @@ void Solution(void *v)
         C[i*3+2] = c[2];
       }
 
-      cout << "Objective vector " << C << endl;
+      // cout << "Objective vector " << C << endl;
       cout << "Objective function " << F << endl;
 
 
