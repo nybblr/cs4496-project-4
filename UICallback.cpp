@@ -12,6 +12,10 @@
 #include "Model.h"
 #endif	//__HMODEL_H__
 
+#ifndef __ARTICULATEDBODY_H__
+#include "ArticulatedBody.h"
+#endif	//__ARTICULATEDBODY_H__
+
 #ifndef	__MARKER_H__
 #include "Marker.h"
 #endif	//__MARKER_H__
@@ -30,6 +34,7 @@
 
 extern GLenum DRAW_STYLE;
 extern RealTimeIKUI *UI;
+extern Matd* frames;
 
 void LoadModel_cb(Fl_Widget *o, void *v)
 {
@@ -69,6 +74,7 @@ void Frame_scr_cb(Fl_Widget *o, void *v)
   Fl_Value_Slider* slider = (Fl_Value_Slider*)o;
   int currentFrame = int(slider->value());
   UI->mFrameCounter_cou->value(currentFrame);
+  ((ArticulatedBody*)UI->mData->mSelectedModel)->SetDofs(*frames, currentFrame);
 }
 
 void Speed_cb(Fl_Widget *o, void *v)
@@ -209,10 +215,10 @@ void ShowSliders_cb(Fl_Widget *o, void *v)
   if(!UI->mDofSliderWindow->shown()){	
     int nDof = UI->mData->mSelectedModel->GetDofCount();
     for(int i = 0; i < nDof; i++){
-	Dof *currDof = UI->mData->mSelectedModel->mDofList.mDofs[i];
-	UI->mDofs_sli[i]->maximum(currDof->mUpperBound);
-	UI->mDofs_sli[i]->minimum(currDof->mLowerBound);
-	UI->mDofs_sli[i]->value(currDof->mVal);
+  Dof *currDof = UI->mData->mSelectedModel->mDofList.mDofs[i];
+  UI->mDofs_sli[i]->maximum(currDof->mUpperBound);
+  UI->mDofs_sli[i]->minimum(currDof->mLowerBound);
+  UI->mDofs_sli[i]->value(currDof->mVal);
     }
     UI->mDofSliderWindow->show();
   }else{

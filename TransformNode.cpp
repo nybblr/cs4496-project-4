@@ -211,7 +211,7 @@ std::vector<Vec4d*> TransformNode::ComputeJacobian(Matd* J, C3dFileInfo* c3d, in
 
   // Now add all our handles to the list
   for (int i = 0; i < mHandles.size(); i++) {
-    hLocals[mHandles[i]->mMarkerOrder] = new Vec4d(mHandles[i]->mOffset, 1);
+    hLocals[mHandles[i]->mMarkerOrder] = new Vec4d(Vec4d(mHandles[i]->mOffset, 1));
   }
 
   // std::cout << mName << " has handle list:" << std::endl;
@@ -266,6 +266,7 @@ std::vector<Vec4d*> TransformNode::ComputeJacobian(Matd* J, C3dFileInfo* c3d, in
         // Derivative transform
         h = T * h;
 
+        // cout << "Populating " << r << "," << c << endl;
         // Each row is an x,y, or z of a handle
         // All child handles use the transform
         // Otherwise, all 0s are output

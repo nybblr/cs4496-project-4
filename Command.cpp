@@ -26,6 +26,8 @@
 #include "Transform.h"
 #endif	//__TRANSFORM_H__
 
+Matd* frames = new Matd();
+
 // ArticulatedBody* aBody;
 
 int readSkelFile( FILE* file, ArticulatedBody* skel );
@@ -72,15 +74,23 @@ void Solution(void *v)
 
     int numDofs = model->GetDofCount();
     int numCons = model->GetHandleCount() * 3;
+    int numFrames = c3d->GetFrameCount();
 
-    int frameNum = 0;
+    // int frameNum = 0;
     double alpha = 0.02;
+
+    *frames = vl_0;
+    frames->SetSize(numFrames, numDofs);
+    *frames = vl_0;
 
     cout << "The Jacobian will be " << numCons << " by " << numDofs << endl;
 
     double F;
-    for (int curr = 0; curr < model->GetHandleCount(); curr++) {
-      cout << "Converging " << curr << endl;
+    Vecd qnew;
+    for (int frameNum = 0; frameNum < numFrames; frameNum++) {
+      cout << "On frame " << frameNum << endl;
+    // for (int curr = 0; curr < model->GetHandleCount(); curr++) {
+      // cout << "Converging " << curr << endl;
     do {
       F = 0;
 
@@ -101,7 +111,7 @@ void Solution(void *v)
         Vec3d m = c3d->GetMarkerPos(frameNum, i);
         Vec3d c = h - m;
 
-        if (i != curr) c = vl_0;
+        if (i != 0) c = vl_0;
 
         F += sqrlen(c);
         C[i*3+0] = c[0];
@@ -118,10 +128,12 @@ void Solution(void *v)
       Vecd q;
       q.SetSize(numDofs);
       model->mDofList.GetDofs(&q);
-      Vecd qnew = q - alpha*dF;
+      qnew = q - alpha*dF;
 
       model->SetDofs(qnew);
     } while (F > 1E-5);
+    // }
+      (*frames)[frameNum] = qnew;
     }
 }
 
