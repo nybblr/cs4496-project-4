@@ -79,6 +79,8 @@ void Solution(void *v)
     cout << "The Jacobian will be " << numCons << " by " << numDofs << endl;
 
     double F;
+    for (int curr = 0; curr < model->GetHandleCount(); curr++) {
+      cout << "Converging " << curr << endl;
     do {
       F = 0;
 
@@ -92,18 +94,22 @@ void Solution(void *v)
 
       Vecd C;
       C.SetSize(numCons);
+      C = vl_0;
 
       for (int i = 0; i < model->GetHandleCount(); i++) {
         Vec3d h = model->mHandleList[i]->mGlobalPos;
         Vec3d m = c3d->GetMarkerPos(frameNum, i);
         Vec3d c = h - m;
 
-        // if (i != 39 && i != 32) c = vl_0;
+        if (i != curr) c = vl_0;
 
         F += sqrlen(c);
-        sub(C, i*3, 3) = c;
+        C[i*3+0] = c[0];
+        C[i*3+1] = c[1];
+        C[i*3+2] = c[2];
       }
 
+      cout << "Objective vector " << C << endl;
       cout << "Objective function " << F << endl;
 
 
@@ -116,6 +122,7 @@ void Solution(void *v)
 
       model->SetDofs(qnew);
     } while (F > 1E-5);
+    }
 }
 
 void Exit(void *v)
