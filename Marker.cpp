@@ -12,12 +12,14 @@ Marker::Marker( char* name, double x, double y, double z,int markerOrderVal) : S
 {
   mMarkerOrder = markerOrderVal;
   mNodeIndex = -1;
+  mWeight = 1;
 }
 
 Marker::Marker( char* name, double x, double y, double z,int markerOrderVal, int nodeIndex) : Sphere( COLOR, 0.0 ), mName( name ), mOffset(x,y,z)
 {
   mMarkerOrder = markerOrderVal;
   mNodeIndex = nodeIndex;
+  mWeight = 1;
 }
 
 

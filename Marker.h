@@ -20,6 +20,7 @@ class Marker : public Sphere
   Vec3d mOffset; // the local coordinates of this marker
   int mMarkerOrder; // this marker can be accessed by mSelectedModel->mHandleList[mMarkerOrder]
   Vec3d mGlobalPos; // the world coordinates of this marker; updated by SetDofs()
+  double mWeight;
 };
 
 #endif
