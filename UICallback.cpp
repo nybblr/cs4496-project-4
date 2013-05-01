@@ -75,6 +75,8 @@ void Frame_scr_cb(Fl_Widget *o, void *v)
   int currentFrame = int(slider->value());
   UI->mFrameCounter_cou->value(currentFrame);
   ((ArticulatedBody*)UI->mData->mSelectedModel)->SetDofs(*frames, currentFrame);
+  UI->mShowConstr_but->value(1);
+  UI->mGLWindow->refresh();
 }
 
 void Speed_cb(Fl_Widget *o, void *v)

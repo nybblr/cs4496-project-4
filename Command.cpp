@@ -111,9 +111,13 @@ void Solution(void *v)
       for (int i = 0; i < model->GetHandleCount(); i++) {
         Vec3d h = model->mHandleList[i]->mGlobalPos;
         Vec3d m = c3d->GetMarkerPos(frameNum, i);
+        if (m[0] == 0.0 && m[1] == 0.0 && m[2] == 0.0)
+          model->mHandleList[i]->mWeight = 0;
         Vec3d c = h - m;
+        c *= model->mHandleList[i]->mWeight;
+        // cout << "Weight " << model->mHandleList[i]->mWeight;
 
-        if (i != 0) c = vl_0;
+        // if (i != 0) c = vl_0;
 
         F += sqrlen(c);
         C[i*3+0] = c[0];

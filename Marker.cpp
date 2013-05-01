@@ -13,6 +13,8 @@ Marker::Marker( char* name, double x, double y, double z,int markerOrderVal) : S
   mMarkerOrder = markerOrderVal;
   mNodeIndex = -1;
   mWeight = 1;
+  if (x == 0.0 && y == 0.0 && z == 0.0)
+    mWeight = 0;
 }
 
 Marker::Marker( char* name, double x, double y, double z,int markerOrderVal, int nodeIndex) : Sphere( COLOR, 0.0 ), mName( name ), mOffset(x,y,z)
@@ -20,6 +22,8 @@ Marker::Marker( char* name, double x, double y, double z,int markerOrderVal, int
   mMarkerOrder = markerOrderVal;
   mNodeIndex = nodeIndex;
   mWeight = 1;
+  if (x == 0.0 && y == 0.0 && z == 0.0)
+    mWeight = 0;
 }
 
 
