@@ -84,15 +84,19 @@ void Solution(void *v)
 
     cout << "The Jacobian will be " << numCons << " by " << numDofs << endl;
 
-    double F;
+    double F = 0;
+    double Fl = 0;
+    double Fb = 10000;
     Vecd qnew;
+    Vecd qbest;
     int i;
-    for (int frameNum = 0; frameNum < numFrames; frameNum++) {
+    for (int frameNum = 0; frameNum < 10; frameNum++) {
       cout << "On frame " << frameNum << endl;
       i = 0;
     // for (int curr = 0; curr < model->GetHandleCount(); curr++) {
       // cout << "Converging " << curr << endl;
     do {
+      Fl = F;
       F = 0;
       i++;
 
@@ -137,9 +141,11 @@ void Solution(void *v)
       qnew = q - alpha*dF;
 
       model->SetDofs(qnew);
-    } while (F > 1E-5 && i < 1000);
+
+      if (F < Fb) qbest = qnew;
+    } while ((F > 1E-5 || abs(F-Fl) < 1E-3) && i < 1000);
     // }
-      (*frames)[frameNum] = qnew;
+      (*frames)[frameNum] = qbest;
     }
 }
 
