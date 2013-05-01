@@ -86,12 +86,15 @@ void Solution(void *v)
 
     double F;
     Vecd qnew;
+    int i;
     for (int frameNum = 0; frameNum < numFrames; frameNum++) {
       cout << "On frame " << frameNum << endl;
+      i = 0;
     // for (int curr = 0; curr < model->GetHandleCount(); curr++) {
       // cout << "Converging " << curr << endl;
     do {
       F = 0;
+      i++;
 
       model->ComputeJacobian(frameNum);
 
@@ -130,7 +133,7 @@ void Solution(void *v)
       qnew = q - alpha*dF;
 
       model->SetDofs(qnew);
-    } while (F > 1E-5);
+    } while (F > 1E-5 && i < 1000);
     // }
       (*frames)[frameNum] = qnew;
     }
