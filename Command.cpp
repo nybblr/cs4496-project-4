@@ -26,7 +26,7 @@
 #include "Transform.h"
 #endif	//__TRANSFORM_H__
 
-
+// ArticulatedBody* aBody;
 
 int readSkelFile( FILE* file, ArticulatedBody* skel );
 
@@ -68,6 +68,7 @@ void Solution(void *v)
 {
     Model* model = UI->mData->mSelectedModel;
     C3dFileInfo* c3d = model->mOpenedC3dFile;
+    // aBody = (ArticulatedBody*)model;
 
     int numDofs = model->GetDofCount();
     int numCons = model->GetHandleCount() * 3;
@@ -85,14 +86,9 @@ void Solution(void *v)
 
       Matd J = *model->mJacobian;
 
-      Matd Js;
-      Js = vl_0;
-      Js.SetSize(numCons, numDofs);
-      sub(Js, 0, 0, 3, numDofs) = sub(J, 0, 0, 3, numDofs);
-
       Matd Jt = trans(J);
 
-      cout << Jt << endl;
+      // cout << Jt << endl;
 
       Vecd C;
       C.SetSize(numCons);
@@ -101,6 +97,8 @@ void Solution(void *v)
         Vec3d h = model->mHandleList[i]->mGlobalPos;
         Vec3d m = c3d->GetMarkerPos(frameNum, i);
         Vec3d c = h - m;
+
+        // if (i != 39 && i != 32) c = vl_0;
 
         F += sqrlen(c);
         sub(C, i*3, 3) = c;

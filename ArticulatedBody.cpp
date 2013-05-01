@@ -122,7 +122,6 @@ std::vector<Vec4d*> ArticulatedBody::ComputeJacobian(int frameNum)
   // When they return, add your own entry for all constraints and your DOFs.
 
   std::vector<Vec4d*> handles = mRoot->ComputeJacobian(mJacobian, mOpenedC3dFile, frameNum);
-  // std::cout << mJacobian << std::endl;
 
   return handles;
 }

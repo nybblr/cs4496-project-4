@@ -14,6 +14,11 @@
 #include "GLPrimitives.h"
 #endif //__GLPRIMITIVES_H__
 
+#ifndef __ARTICULATEDBODY_H__
+#include "ArticulatedBody.h"
+#endif	//__ARTICULATEDBODY_H__
+
+// extern ArticulatedBody* aBody;
 
 #include <FL/gl.h>
 #include <assert.h>
@@ -256,6 +261,7 @@ std::vector<Vec4d*> TransformNode::ComputeJacobian(Matd* J, C3dFileInfo* c3d, in
         Vec4d h = Vec4d(0,0,0,1);
         if (hLocals[r] != (Vec4d*)NULL)
           h = *hLocals[r];
+          // h = inv(mParentTransform)*Vec4d(aBody->mHandleList[r]->mGlobalPos, 1);
 
         // Derivative transform
         h = T * h;
